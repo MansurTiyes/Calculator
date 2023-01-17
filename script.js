@@ -1,20 +1,30 @@
-let firstInput = "";
-let lastInput;
+let firstInput = "0";
+let lastInput = "";
 let selectedOperation;
 let res;
 let savedOperation;
 let savedLastInput;
+
+const inputField = document.querySelector('.inputField');
 
 const numberButton = document.querySelectorAll('.numberButton');
 
 for(let i=0; i<numberButton.length; i++){
     numberButton[i].addEventListener('click',function(e){
         if (selectedOperation ==  null){
-            firstInput+=e.target.id;
+            if (firstInput==0){
+                firstInput="";
+                firstInput = e.target.id;
+                inputField.textContent = firstInput;
+            }
+            else{
+                firstInput+=e.target.id;
+                inputField.textContent = firstInput;}
             //TODO CHANGE THIS SECTION TO CHECK IF OPERATOR IS NULL INSTEAD OF FIRST INPUT
         }
         else {
             lastInput += e.target.id;
+            inputField.textContent = lastInput;
         }
     });
 };
@@ -36,6 +46,7 @@ for(let i =0; i<orangeButton.length;i++){
                     firstInput = "";
                     savedLastInput = lastInput;
                     lastInput = "";
+                    inputField.textContent = res;
                     break;
                 case "subtraction":
                     res = subtractionOperation(firstInput, lastInput);
@@ -45,6 +56,7 @@ for(let i =0; i<orangeButton.length;i++){
                     firstInput = "";
                     savedLastInput = lastInput;
                     lastInput = "";
+                    inputField.textContent = res;
                     break;
                 case "multiplication":
                     res = mulOpertation(firstInput, lastInput);
@@ -54,6 +66,7 @@ for(let i =0; i<orangeButton.length;i++){
                     firstInput = "";
                     savedLastInput = lastInput;
                     lastInput = "";
+                    inputField.textContent = res;
                     break;
                 case "division":
                     res = divisionOperation(firstInput, lastInput);
@@ -63,6 +76,7 @@ for(let i =0; i<orangeButton.length;i++){
                     firstInput = "";
                     savedLastInput = lastInput;
                     lastInput = "";
+                    inputField.textContent = res;
                     break;
             }
         }
