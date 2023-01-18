@@ -9,8 +9,15 @@ const inputField = document.querySelector('.inputField');
 
 const numberButton = document.querySelectorAll('.numberButton');
 
+const clearButton = document.querySelector('#clearButton');
+
 for(let i=0; i<numberButton.length; i++){
     numberButton[i].addEventListener('click',function(e){
+        //TODO WORK ON DECIMAL LIMIT
+        /*
+        if (inputField.textContent.length>8){
+            inputField.textContent = decimalLimit(inputField.textContent);
+        }*/
         if (selectedOperation ==  null){
             if (firstInput==0){
                 firstInput="";
@@ -23,9 +30,13 @@ for(let i=0; i<numberButton.length; i++){
             //TODO CHANGE THIS SECTION TO CHECK IF OPERATOR IS NULL INSTEAD OF FIRST INPUT
         }
         else {
+            if (firstInput==""){
+                firstInput = res;
+            }
             lastInput += e.target.id;
             inputField.textContent = lastInput;
         }
+        clearButton.textContent = "C";
     });
 };
 
@@ -40,7 +51,6 @@ for(let i =0; i<orangeButton.length;i++){
             switch(selectedOperation){
                 case "addition":
                     res = additionOperation(firstInput,lastInput);
-                    console.log(res);
                     selectedOperation = null;
                     savedOperation = "addition";
                     firstInput = "";
@@ -50,7 +60,6 @@ for(let i =0; i<orangeButton.length;i++){
                     break;
                 case "subtraction":
                     res = subtractionOperation(firstInput, lastInput);
-                    console.log(res);
                     selectedOperation = null;
                     savedOperation = "subtraction";
                     firstInput = "";
@@ -60,7 +69,6 @@ for(let i =0; i<orangeButton.length;i++){
                     break;
                 case "multiplication":
                     res = mulOpertation(firstInput, lastInput);
-                    console.log(res);
                     selectedOperation = null;
                     savedOperation = "multiplication";
                     firstInput = "";
@@ -70,7 +78,6 @@ for(let i =0; i<orangeButton.length;i++){
                     break;
                 case "division":
                     res = divisionOperation(firstInput, lastInput);
-                    console.log(res);
                     selectedOperation = null;
                     savedOperation = "multiplication";
                     firstInput = "";
@@ -80,7 +87,54 @@ for(let i =0; i<orangeButton.length;i++){
                     break;
             }
         }
+        //TODO WORK ON DECIMAL LIMIT
+        /*if (inputField.textContent.length>8){
+            inputField.textCOntent = decimalLimit(inputField.textContent);
+        }*/
         //TODO else of equals operation
+    })
+}
+
+const greyButton = document.querySelectorAll('.greyButton');
+for (let i =0; i<greyButton.length; i++){
+    greyButton[i].addEventListener('click',function(e){
+        switch(e.target.id){
+            case "clearButton":
+                res = "0";
+                firstInput = "0";
+                lastInput = "";
+                inputField.textContent = firstInput;
+                clearButton.textContent = "AC";
+                break;
+            case "signChange":
+                if (inputField.textContent == firstInput){
+                    firstInput = signReverse(firstInput);
+                    inputField.textContent = firstInput;
+                }
+                else if (inputField.textContent == lastInput){
+                    lastInput = signReverse(lastInput);
+                    inputField.textContent = lastInput;
+                }
+                else {
+                    res = signReverse(res);
+                    inputField.textContent = res;
+                }
+                break;
+            case "percentageOption":
+                if (inputField.textContent == firstInput){
+                    firstInput = percentageFind(firstInput);
+                    inputField.textContent = firstInput;
+                }
+                else if (inputField.textContent == lastInput){
+                    lastInput = percentageFind(lastInput);
+                    inputField.textContent = lastInput;
+                }
+                else {
+                    res = percentageFind(res);
+                    inputField.textContent = res;
+                }
+                break;
+        }
     })
 }
 
@@ -98,4 +152,17 @@ function mulOpertation(initialInput, finalInput){
 
 function divisionOperation(initialInput, finalInput){
     return initialInput/finalInput;
+}
+
+function signReverse(input){
+    return -Number(input);
+}
+
+function percentageFind(input){
+    return input/100;
+}
+
+function decimalLimit(input){
+    input.slice(8);
+    return input;
 }
