@@ -13,11 +13,11 @@ const clearButton = document.querySelector('#clearButton');
 
 for(let i=0; i<numberButton.length; i++){
     numberButton[i].addEventListener('click',function(e){
-        //TODO WORK ON DECIMAL LIMIT
-        /*
-        if (inputField.textContent.length>8){
-            inputField.textContent = decimalLimit(inputField.textContent);
-        }*/
+        this.classList.add('numberButtonAnimation');
+        orangeRemove();
+        setTimeout(function(){
+            numberButton[i].classList.remove('numberButtonAnimation');
+        },250);
         if (selectedOperation ==  null){
             if (firstInput==0){
                 firstInput="";
@@ -27,7 +27,6 @@ for(let i=0; i<numberButton.length; i++){
             else{
                 firstInput+=e.target.id;
                 inputField.textContent = firstInput;}
-            //TODO CHANGE THIS SECTION TO CHECK IF OPERATOR IS NULL INSTEAD OF FIRST INPUT
         }
         else {
             if (firstInput==""){
@@ -37,6 +36,9 @@ for(let i=0; i<numberButton.length; i++){
             inputField.textContent = lastInput;
         }
         clearButton.textContent = "C";
+        if (inputField.textContent.length>8){
+            inputField.textContent = inputField.textContent.slice(0,8);
+        }
     });
 };
 
@@ -44,10 +46,36 @@ const orangeButton = document.querySelectorAll('.orangeButton');
 
 for(let i =0; i<orangeButton.length;i++){
     orangeButton[i].addEventListener('click',function(e){
+        orangeRemove();
         if (e.target.id!="equals"){
             selectedOperation = e.target.id;
+            this.classList.add('orangeButtonAnimation');
+        }
+        else if (e.target.id=="equals"&&firstInput==""){
+            switch (savedOperation){
+                case "addition":
+                    res = additionOperation(res,savedLastInput);
+                    inputField.textContent = res;
+                    break;
+                case "subtraction":
+                    res = subtractionOperation(res, savedLastInput);
+                    inputField.textContent = res;
+                    break;
+                case "multiplication":
+                    res = mulOpertation(res, savedLastInput);
+                    inputField.textContent = res;
+                    break;
+                case "division":
+                    res = divisionOperation(res, savedLastInput);
+                    inputField.textContent = res;
+                    break;
+            }
         }
         else{
+            this.classList.add('orangeButtonAnimation');
+            setTimeout(function(){
+                orangeButton[i].classList.remove('orangeButtonAnimation');
+            },100)
             switch(selectedOperation){
                 case "addition":
                     res = additionOperation(firstInput,lastInput);
@@ -79,7 +107,7 @@ for(let i =0; i<orangeButton.length;i++){
                 case "division":
                     res = divisionOperation(firstInput, lastInput);
                     selectedOperation = null;
-                    savedOperation = "multiplication";
+                    savedOperation = "division";
                     firstInput = "";
                     savedLastInput = lastInput;
                     lastInput = "";
@@ -87,17 +115,19 @@ for(let i =0; i<orangeButton.length;i++){
                     break;
             }
         }
-        //TODO WORK ON DECIMAL LIMIT
-        /*if (inputField.textContent.length>8){
-            inputField.textCOntent = decimalLimit(inputField.textContent);
-        }*/
-        //TODO else of equals operation
+        if (inputField.textContent.length>8){
+            inputField.textContent = inputField.textContent.slice(0,8);
+        }
     })
 }
 
 const greyButton = document.querySelectorAll('.greyButton');
 for (let i =0; i<greyButton.length; i++){
     greyButton[i].addEventListener('click',function(e){
+        this.classList.add('greyButtonAnimation');
+        setTimeout(function(){
+            greyButton[i].classList.remove('greyButtonAnimation');
+        }, 250);
         switch(e.target.id){
             case "clearButton":
                 res = "0";
@@ -105,6 +135,7 @@ for (let i =0; i<greyButton.length; i++){
                 lastInput = "";
                 inputField.textContent = firstInput;
                 clearButton.textContent = "AC";
+                orangeRemove();
                 break;
             case "signChange":
                 if (inputField.textContent == firstInput){
@@ -151,7 +182,7 @@ function mulOpertation(initialInput, finalInput){
 }
 
 function divisionOperation(initialInput, finalInput){
-    return initialInput/finalInput;
+    return initialInput/finalInput; 
 }
 
 function signReverse(input){
@@ -162,7 +193,8 @@ function percentageFind(input){
     return input/100;
 }
 
-function decimalLimit(input){
-    input.slice(8);
-    return input;
+function orangeRemove(){
+    for(let i=0;i<orangeButton.length;i++){
+        orangeButton[i].classList.remove('orangeButtonAnimation');
+    }
 }
